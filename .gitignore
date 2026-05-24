@@ -1,3 +1,15 @@
+# Unity
+/Library/
+/Logs/
+/UserSettings/
+/Temp/
+/obj/
+*.csproj
+*.sln
+
+# macOS
 .DS_Store
+
+# Build
 Build-Suyeong.app/
 *.app/
