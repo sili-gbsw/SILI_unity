@@ -1,15 +1,36 @@
-# Unity
-/Library/
-/Logs/
-/UserSettings/
-/Temp/
-/obj/
-*.csproj
-*.sln
-
 # macOS
 .DS_Store
 
-# Build
-Build-Suyeong.app/
-*.app/
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+sysinfo.txt
+*.apk
+*.aab
+*.unitypackage
+crashlytics-build.properties
+
+# Visual Studio
+.vs/
+*.csproj
+*.csproj.user
+*.sln
+*.slnx
+*.suo
+*.user
+*.userprefs
+.vsconfig
+
+# JetBrains
+.idea/
+*.sln.DotSettings.user
+
+# VSCode (keep extensions/launch/settings)
