@@ -101,13 +101,17 @@ public class WeldDataGenerator : MonoBehaviour
         return Mathf.Clamp(selectedScenario, 0, scenarios.Length - 1);
     }
 
+    // 백엔드에 등록된 part_id 목록
+    private static readonly string[] RegisteredPartIds = { "BODY-0042", "TEST-PHASE3", "BODY-3294" };
+
     private WeldData BuildData(int index)
     {
         var s = scenarios[index];
+        string partId = RegisteredPartIds[partCounter % RegisteredPartIds.Length];
         return new WeldData
         {
-            partId          = $"BODY-{partCounter:D4}",
-            pointId         = $"P{index + 1}",
+            partId          = partId,
+            pointId         = $"P-{(index + 1):D3}",
             current         = UnityEngine.Random.Range(s.currentRange.x,  s.currentRange.y),
             weldTime        = UnityEngine.Random.Range(s.weldTimeRange.x, s.weldTimeRange.y),
             force           = UnityEngine.Random.Range(s.forceRange.x,    s.forceRange.y),
