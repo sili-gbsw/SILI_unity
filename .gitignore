@@ -34,3 +34,15 @@ crashlytics-build.properties
 *.sln.DotSettings.user
 
 # VSCode (keep extensions/launch/settings)
+
+# Crash logs
+mono_crash*.json
+
+# Recovery / test scenes
+SPOT/Assets/_Recovery/
+SPOT/Assets/_Recovery.meta
+SPOT/Assets/test.unity
+SPOT/Assets/test.unity.meta
+
+# VSCode workspace
+.vscode/
