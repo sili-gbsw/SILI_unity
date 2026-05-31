@@ -8,6 +8,7 @@ public class SimulatorManager : MonoBehaviour
 
     private void Awake()
     {
+        Application.runInBackground = true;
         apiClient = GetComponent<ApiClient>();
         apiClient.OnResult += result => SimulatorEvents.RaiseJudged(result);
         apiClient.OnError  += err   => Debug.LogWarning($"[SimulatorManager] {err}");
