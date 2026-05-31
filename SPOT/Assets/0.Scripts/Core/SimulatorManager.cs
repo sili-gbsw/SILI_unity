@@ -1,28 +1,18 @@
 using UnityEngine;
 
-[RequireComponent(typeof(WeldJudgementEngine))]
+[RequireComponent(typeof(ApiClient))]
 [DisallowMultipleComponent]
 public class SimulatorManager : MonoBehaviour
 {
-    private WeldJudgementEngine engine;
+    private ApiClient apiClient;
 
     private void Awake()
     {
-        engine = GetComponent<WeldJudgementEngine>();
+        apiClient = GetComponent<ApiClient>();
+        apiClient.OnResult += result => SimulatorEvents.RaiseJudged(result);
+        apiClient.OnError  += err   => Debug.LogWarning($"[SimulatorManager] {err}");
     }
 
-    private void OnEnable()
-    {
-        WeldDataGenerator.OnDataGenerated += HandleData;
-    }
-
-    private void OnDisable()
-    {
-        WeldDataGenerator.OnDataGenerated -= HandleData;
-    }
-
-    private void HandleData(WeldData data)
-    {
-        SimulatorEvents.RaiseJudged(engine.Judge(data));
-    }
+    private void OnEnable()  => WeldDataGenerator.OnDataGenerated += apiClient.PostWeldEvent;
+    private void OnDisable() => WeldDataGenerator.OnDataGenerated -= apiClient.PostWeldEvent;
 }

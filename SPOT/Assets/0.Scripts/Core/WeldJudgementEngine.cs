@@ -1,61 +1,51 @@
 using UnityEngine;
 
+// 백엔드 판정 실패 시 로컬 폴백 엔진. 기준값은 0.8+1.2 MILD 스펙 기준.
 [DisallowMultipleComponent]
 public class WeldJudgementEngine : MonoBehaviour
 {
-    [Header("Reference Targets")]
-    [SerializeField] private float currentCenter = 10000f;
-    [SerializeField] private float currentTolerance = 1000f;
-    [SerializeField] private float weldTimeCenter = 14f;
-    [SerializeField] private float weldTimeTolerance = 2f;
-    [SerializeField] private float forceCenter = 300f;
-    [SerializeField] private float forceTolerance = 50f;
+    [Header("Reference Targets (0.8+1.2 MILD)")]
+    [SerializeField] private float currentCenter      = 9500f;   // A  — backend center 9.5 kA
+    [SerializeField] private float currentTolerance   = 1000f;   // ±1.0 kA
+    [SerializeField] private float weldTimeCenter     = 12f;     // cycle — backend center 12.0
+    [SerializeField] private float weldTimeTolerance  = 2f;      // ±2 cycle
+    [SerializeField] private float forceCenter        = 265f;    // kgf — backend center 2.6 kN
+    [SerializeField] private float forceTolerance     = 40f;     // ±40 kgf (~±0.4 kN)
 
     [Header("Wear Thresholds")]
-    [SerializeField] private int wearCautionHits = 1800;
-    [SerializeField] private int wearReinspectHits = 2200;
+    [SerializeField] private int wearCautionHits    = 1800;
+    [SerializeField] private int wearReinspectHits  = 2200;
 
     [Header("Score Weights")]
-    [SerializeField, Range(0f, 1f)] private float currentWeight = 0.35f;
+    [SerializeField, Range(0f, 1f)] private float currentWeight  = 0.35f;
     [SerializeField, Range(0f, 1f)] private float weldTimeWeight = 0.25f;
-    [SerializeField, Range(0f, 1f)] private float forceWeight = 0.25f;
-    [SerializeField, Range(0f, 1f)] private float wearWeight = 0.15f;
+    [SerializeField, Range(0f, 1f)] private float forceWeight    = 0.25f;
+    [SerializeField, Range(0f, 1f)] private float wearWeight     = 0.15f;
 
     [Header("Status Thresholds")]
-    [SerializeField, Range(0f, 100f)] private float cautionThreshold = 30f;
+    [SerializeField, Range(0f, 100f)] private float cautionThreshold   = 30f;
     [SerializeField, Range(0f, 100f)] private float reinspectThreshold = 60f;
 
     public JudgementResult Judge(WeldData data)
     {
         var breakdown = BuildBreakdown(data);
-        return new JudgementResult
-        {
-            data = data,
-            breakdown = breakdown,
-            status = Classify(breakdown.total),
-        };
+        return new JudgementResult { data = data, breakdown = breakdown, status = Classify(breakdown.total) };
     }
 
     private WeldScoreBreakdown BuildBreakdown(WeldData d)
     {
-        float currentDev  = Deviation(d.current,  currentCenter,  currentTolerance);
-        float weldTimeDev = Deviation(d.weldTime, weldTimeCenter, weldTimeTolerance);
-        float forceDev    = Deviation(d.force,    forceCenter,    forceTolerance);
-        float wearDev     = WearScore(d.cumulativeHits);
-
-        float currentScore  = currentDev  * currentWeight;
-        float weldTimeScore = weldTimeDev * weldTimeWeight;
-        float forceScore    = forceDev    * forceWeight;
-        float wearScore     = wearDev     * wearWeight;
-        float total = Mathf.Clamp(currentScore + weldTimeScore + forceScore + wearScore, 0f, 100f);
+        float cScore = Deviation(d.current,  currentCenter,  currentTolerance)  * currentWeight;
+        float tScore = Deviation(d.weldTime, weldTimeCenter, weldTimeTolerance) * weldTimeWeight;
+        float fScore = Deviation(d.force,    forceCenter,    forceTolerance)    * forceWeight;
+        float wScore = WearScore(d.cumulativeHits)                              * wearWeight;
 
         return new WeldScoreBreakdown
         {
-            currentScore  = currentScore,
-            weldTimeScore = weldTimeScore,
-            forceScore    = forceScore,
-            wearScore     = wearScore,
-            total         = total,
+            currentScore  = cScore,
+            weldTimeScore = tScore,
+            forceScore    = fScore,
+            wearScore     = wScore,
+            total         = Mathf.Clamp(cScore + tScore + fScore + wScore, 0f, 100f),
             weights = new WeldScoreWeights
             {
                 current  = currentWeight,
@@ -68,7 +58,7 @@ public class WeldJudgementEngine : MonoBehaviour
 
     private WeldStatus Classify(float score)
     {
-        if (score <= cautionThreshold) return WeldStatus.Normal;
+        if (score <= cautionThreshold)   return WeldStatus.Normal;
         if (score <= reinspectThreshold) return WeldStatus.Caution;
         return WeldStatus.Reinspect;
     }
@@ -81,8 +71,8 @@ public class WeldJudgementEngine : MonoBehaviour
 
     private float WearScore(int hits)
     {
-        if (hits <= wearCautionHits) return 0f;
-        if (hits <= wearReinspectHits) return 50f;
+        if (hits <= wearCautionHits)    return 0f;
+        if (hits <= wearReinspectHits)  return 50f;
         return 100f;
     }
 
@@ -93,7 +83,6 @@ public class WeldJudgementEngine : MonoBehaviour
 
         float sum = currentWeight + weldTimeWeight + forceWeight + wearWeight;
         if (sum > 0f && !Mathf.Approximately(sum, 1f))
-            Debug.LogWarning(
-                $"{nameof(WeldJudgementEngine)}: weights sum = {sum:F2}, expected 1.0", this);
+            Debug.LogWarning($"{nameof(WeldJudgementEngine)}: weights sum = {sum:F2} (expected 1.0)", this);
     }
 }

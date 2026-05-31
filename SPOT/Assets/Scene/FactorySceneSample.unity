@@ -17583,6 +17583,7 @@ GameObject:
   - component: {fileID: 1767696511}
   - component: {fileID: 1767696510}
   - component: {fileID: 1767696509}
+  - component: {fileID: 1767696513}
   m_Layer: 0
   m_Name: SimulatorManager
   m_TagString: Untagged
@@ -17642,10 +17643,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeldDataGenerator
   scenarios:
   - label: "A \uC815\uC0C1"
-    currentRange: {x: 9500, y: 10500}
-    weldTimeRange: {x: 13, y: 15}
-    forceRange: {x: 280, y: 320}
-    hitsRange: {x: 300, y: 800}
+    currentRange: {x: 9300, y: 9700}
+    weldTimeRange: {x: 11.5, y: 12.5}
+    forceRange: {x: 255, y: 275}
+    hitsRange: {x: 300, y: 600}
   - label: "B \uC804\uB958\uC800\uD558"
     currentRange: {x: 8200, y: 8800}
     weldTimeRange: {x: 13, y: 15}
@@ -17671,7 +17672,7 @@ MonoBehaviour:
     weldTimeRange: {x: 13, y: 15}
     forceRange: {x: 200, y: 250}
     hitsRange: {x: 2000, y: 2400}
-  autoCycleOrder: 0000000000000000010000000100000003000000030000000500000005000000
+  autoCycleOrder: 00000000000000000000000000000000000000000000000001000000020000000300000005000000
   startInAutoCycle: 1
 --- !u!4 &1767696512
 Transform:
@@ -17688,6 +17689,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1767696513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767696508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f648e4a126ff4451dbfa9da267447cda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ApiClient
+  baseUrl: http://15.164.245.147:8000/api/v1
+  lineId: LINE-DEFAULT
+  materialCode: MILD
+  electrodeShape: C-TYPE
+  localEngine: {fileID: 1767696509}
 --- !u!1 &1772444536
 GameObject:
   m_ObjectHideFlags: 0

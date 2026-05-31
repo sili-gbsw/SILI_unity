@@ -15,10 +15,10 @@ public class WagonConveyor : MonoBehaviour
     [SerializeField] private Transform exitPoint;
 
     [Header("Motion")]
-    [SerializeField, Min(0.01f)] private float travelSpeed = 2.5f;
-    [SerializeField, Min(0f)] private float weldDwellSeconds = 1.5f;
-    [SerializeField, Min(0f)] private float exitDwellSeconds = 0.4f;
-    [SerializeField, Min(0f)] private float startupDelaySeconds = 0.25f;
+    [SerializeField, Min(0.01f)] private float travelSpeed = 6.0f;
+    [SerializeField, Min(0f)] private float weldDwellSeconds = 0.8f;
+    [SerializeField, Min(0f)] private float exitDwellSeconds = 0.2f;
+    [SerializeField, Min(0f)] private float startupDelaySeconds = 0.1f;
     [SerializeField, Min(0f)] private float arriveEpsilon = 0.02f;
 
     [Header("Particle")]

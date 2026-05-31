@@ -87,13 +87,12 @@ public class ScenarioButtonUI : MonoBehaviour
         }
     }
 
-    private Color ScenarioColor(int index)
+    // 0=A 정상, 1=B 전류저하, 2=C 시간부족, 3=D 가압부족 → CAUTION 계열
+    // 4=E 전극마모, 5=F 복합이상 → REJECT 계열
+    private Color ScenarioColor(int index) => index switch
     {
-        return index switch
-        {
-            0      => colorNormalScenario,
-            1 or 2 => colorCautionScenario,
-            _      => colorReinspectScenario,
-        };
-    }
+        0          => colorNormalScenario,
+        1 or 2 or 3 => colorCautionScenario,
+        _          => colorReinspectScenario,
+    };
 }

@@ -40,7 +40,9 @@ public class ReinspectQueueUI : MonoBehaviour
         var label = entry.GetComponentInChildren<TextMeshProUGUI>(includeInactive: true);
         if (label == null) return;
 
-        var time = DateTimeOffset.FromUnixTimeMilliseconds(data.timestamp).LocalDateTime;
+        DateTime time;
+        try { time = DateTimeOffset.FromUnixTimeMilliseconds(data.timestamp).LocalDateTime; }
+        catch { time = DateTime.Now; }
         label.text  = $"{data.partId}   재검권장   {time:HH:mm:ss}";
         label.color = ReinspectColor;
     }

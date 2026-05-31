@@ -21,7 +21,7 @@ public class WeldDataGenerator : MonoBehaviour
 
     [SerializeField] private Scenario[] scenarios = new[]
     {
-        new Scenario { label = "A 정상" },
+        new Scenario { label = "A 정상", currentRange = new Vector2(9300f, 9700f), weldTimeRange = new Vector2(11.5f, 12.5f), forceRange = new Vector2(255f, 275f), hitsRange = new Vector2Int(300, 600) },
         new Scenario { label = "B 전류저하",        currentRange  = new Vector2(8200f, 8800f) },
         new Scenario { label = "C 통전시간 부족",   weldTimeRange = new Vector2(9f, 11f) },
         new Scenario { label = "D 가압력 부족",     forceRange    = new Vector2(200f, 240f) },
@@ -35,7 +35,7 @@ public class WeldDataGenerator : MonoBehaviour
         },
     };
 
-    [SerializeField] private int[] autoCycleOrder = { 0, 0, 1, 1, 3, 3, 5, 5 };
+    [SerializeField] private int[] autoCycleOrder = { 0, 0, 0, 0, 0, 0, 1, 2, 3, 5 };
     [SerializeField] private bool startInAutoCycle = true;
 
     private int partCounter;
